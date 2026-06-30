@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gathered & Pressed — Order Form</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F7F3EC;
+    --forest: #2C4A2E;
+    --sage: #7A9E7E;
+    --gold: #C9A84C;
+    --clay: #C47C3E;
+    --ink: #1A1A1A;
+    --muted: #6B6B6B;
+    --white: #FFFFFF;
+    --border: #DDD6C8;
+  }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(160deg, #1F3A21 0%, var(--forest) 55%, #34522F 100%);
+    color: var(--white);
+    text-align: center;
+    padding: 44px 20px 34px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 360px; height: 360px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, rgba(201,168,76,0) 70%);
+    pointer-events: none;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -120px; right: -60px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(122,158,126,0.18) 0%, rgba(122,158,126,0) 70%);
+    pointer-events: none;
+  }
+  .eyebrow-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gold);
+    color: #2C2410;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    border-radius: 100px;
+    margin-bottom: 22px;
+    position: relative;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(30px, 7vw, 46px);
+    letter-spacing: 0.01em;
+    line-height: 1.08;
+    margin-bottom: 6px;
+    position: relative;
+  }
+  header h1 em {
+    color: var(--gold);
+    font-style: italic;
+    font-weight: 700;
+  }
+  header p.tagline {
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+    font-weight: 500;
+    margin-bottom: 26px;
+    position: relative;
+  }
+  .deadline-banner {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.14);
+    backdrop-filter: blur(4px);
+    border-radius: 10px;
+    padding: 16px 22px;
+    max-width: 460px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .deadline-banner .deadline-main {
+    color: var(--gold);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+  }
+  .deadline-banner .deadline-sub {
+    color: rgba(255,255,255,0.8);
+    font-size: 12.5px;
+    line-height: 1.6;
+  }
+
+  /* DELIVERY STRIP */
+  .delivery-strip {
+    background: var(--sage);
+    color: var(--white);
+    text-align: center;
+    padding: 11px 20px;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* MAIN */
+  main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 28px 16px 60px;
+  }
+
+  /* SECTION HEADER */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .section-icon {
+    width: 34px; height: 34px;
+    border-radius: 9px;
+    background: var(--forest);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    color: var(--forest);
+    font-weight: 700;
+  }
+  .section-optional {
+    font-style: italic;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 400;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* SECTION CARD WRAPPER */
+  .section-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 26px 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(44,74,46,0.06), 0 1px 2px rgba(44,74,46,0.04);
+    border: 1px solid var(--border);
+  }
+
+  /* PACK CARDS */
+  .pack-grid {
+    display: grid;
+    gap: 14px;
+  }
+  .pack-card {
+    background: var(--white);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    position: relative;
+  }
+  .pack-card:hover { border-color: var(--sage); }
+  .pack-card.selected {
+    border-color: var(--forest);
+    box-shadow: 0 0 0 1px var(--forest);
+  }
+  .pack-card input[type="radio"] {
+    position: absolute; opacity: 0; pointer-events: none;
+  }
+  .pack-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    padding-right: 30px;
+  }
+  .pack-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    color: var(--forest);
+    line-height: 1.2;
+  }
+  .pack-sub {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .pack-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--forest);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .best-deal-badge {
+    display: inline-block;
+    background: var(--clay);
+    color: var(--white);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+  }
+  .pack-includes {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+  }
+  .pack-includes span {
+    display: inline-block;
+    margin-right: 12px;
+  }
+  .pack-check {
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    position: absolute;
+    top: 22px; right: 22px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, border-color 0.15s;
+    z-index: 2;
+    background: var(--white);
+  }
+  .pack-card:has(.best-deal-badge) .pack-check {
+    top: 54px;
+  }
+  .pack-card.selected .pack-check {
+    background: var(--forest);
+    border-color: var(--forest);
+  }
+  .pack-check::after {
+    content: '';
+    width: 6px; height: 10px;
+    border: 2px solid var(--white);
+    border-top: none; border-left: none;
+    transform: rotate(45deg) translateY(-1px);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .pack-card.selected .pack-check::after { opacity: 1; }
+
+  /* SHOTS */
+  .shots-section {
+    padding-top: 4px;
+  }
+  .shot-type-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .shot-type-btn {
+    background: var(--cream);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .shot-type-btn:hover { border-color: var(--sage); }
+  .shot-type-btn.active {
+    border-color: var(--forest);
+    background: var(--white);
+  }
+  .shot-icon { font-size: 20px; display: block; margin-bottom: 4px; }
+  .shot-name { font-size: 11px; font-weight: 600; color: var(--ink); line-height: 1.3; }
+  .shot-flavor { font-size: 10px; color: var(--muted); }
+
+  .shot-qty-section { display: none; }
+  .shot-qty-section.visible { display: block; }
+  .shot-qty-label {
+    font-size: 12px; font-weight: 600; color: var(--forest);
+    letter-spacing: 0.05em; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .shot-qty-options {
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .qty-btn {
+    background: var(--cream);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 18px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    transition: border-color 0.15s;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+  }
+  .qty-btn:hover { border-color: var(--sage); }
+  .qty-btn.active { border-color: var(--forest); background: var(--white); }
+  .qty-btn .qty-price { font-size: 11px; color: var(--sage); font-weight: 600; }
+  .skip-shots {
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: underline;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    margin-top: 14px;
+    display: block;
+  }
+
+  /* FORM FIELDS */
+  .fields { display: grid; gap: 18px; }
+  label.field-label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--forest);
+    display: block;
+    margin-bottom: 7px;
+  }
+  label.field-label .req-star { color: var(--clay); }
+  input[type="text"], input[type="tel"], select, textarea {
+    width: 100%;
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 9px;
+    padding: 13px 15px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+    -webkit-appearance: none;
+  }
+  input::placeholder, textarea::placeholder { color: #A39B8A; }
+  input:focus, select:focus, textarea:focus { border-color: var(--forest); background: var(--white); }
+  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6B6B' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 15px center; padding-right: 38px; }
+  textarea { min-height: 80px; resize: vertical; }
+
+  /* ORDER SUMMARY */
+  .summary-box {
+    background: var(--forest);
+    color: var(--white);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-total {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.3);
+  }
+  .summary-total span:first-child { font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .summary-empty {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    font-style: italic;
+    text-align: center;
+    padding: 8px 0;
+  }
+
+  /* SUBMIT */
+  .submit-btn {
+    width: 100%;
+    background: var(--gold);
+    color: #2C2410;
+    border: none;
+    border-radius: 12px;
+    padding: 18px;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: background 0.15s, transform 0.1s;
+    margin-top: 4px;
+    box-shadow: 0 4px 14px rgba(201,168,76,0.35);
+  }
+  .submit-btn:hover { background: #b8952e; }
+  .submit-btn:active { transform: scale(0.99); }
+  .submit-note {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+
+  /* SUCCESS */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .success-screen.visible { display: block; }
+  .success-icon { font-size: 52px; margin-bottom: 16px; }
+  .success-screen h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--forest);
+    margin-bottom: 10px;
+  }
+  .success-screen p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  .form-content.hidden { display: none; }
+
+  @media (max-width: 420px) {
+    .shot-type-grid { grid-template-columns: 1fr 1fr 1fr; }
+    .shot-name { font-size: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow-badge">🌿 Cold-Pressed Juice · Made to Order</div>
+  <h1>Gathered <em>&amp; Pressed</em></h1>
+  <p class="tagline">Small Batch · Locally Delivered</p>
+  <div class="deadline-banner">
+    <div class="deadline-main">⏰ Orders close Thursday at 8 PM</div>
+    <div class="deadline-sub">Delivered fresh over the weekend</div>
+  </div>
+</header>
+
+<div class="delivery-strip">
+  Weekend delivery · Eastover · Stedman · Dunn · Lillington · Angier · Holly Springs · Fuquay
+</div>
+
+<main>
+  <div class="form-content" id="formContent">
+
+    <!-- STEP 1: PACK -->
+    <div class="section-card">
+      <div class="section-label">
+        <div class="section-icon">🧺</div>
+        <div class="section-title">Choose a Package</div>
+      </div>
+      <div class="pack-grid" id="packGrid">
+
+      <div class="pack-card" data-pack="4" data-price="36" onclick="selectPack(this)">
+        <input type="radio" name="pack" value="4">
+        <div class="pack-check"></div>
+        <div class="pack-top">
+          <div>
+            <div class="pack-name">4-Juice Pack</div>
+            <div class="pack-sub">Starter Pack</div>
+          </div>
+          <div class="pack-price">$36</div>
+        </div>
+        <div class="pack-includes">
+          <span>1 Green Glow</span><span>1 Tropical Glow</span><span>1 Carrot Immunity</span><span>1 Beet Balance</span>
+        </div>
+      </div>
+
+      <div class="pack-card" data-pack="6" data-price="54" onclick="selectPack(this)">
+        <input type="radio" name="pack" value="6">
+        <div class="pack-check"></div>
+        <div class="pack-top">
+          <div>
+            <div class="pack-name">6-Juice Pack</div>
+            <div class="pack-sub">2-Day Reset</div>
+          </div>
+          <div class="pack-price">$54</div>
+        </div>
+        <div class="pack-includes">
+          <span>2 Green Glow</span><span>2 Tropical Glow</span><span>1 Carrot Immunity</span><span>1 Beet Balance</span>
+        </div>
+      </div>
+
+      <div class="pack-card" data-pack="8" data-price="72" onclick="selectPack(this)">
+        <input type="radio" name="pack" value="8">
+        <div class="pack-check"></div>
+        <div class="best-deal-badge">⭐ Best Deal</div>
+        <div class="pack-top">
+          <div>
+            <div class="pack-name">8-Juice Pack</div>
+            <div class="pack-sub">Weekend Wellness</div>
+          </div>
+          <div class="pack-price">$72</div>
+        </div>
+        <div class="pack-includes">
+          <span>3 Green Glow</span><span>2 Tropical Glow</span><span>1 Carrot Immunity</span><span>1 Beet Balance</span><span>1 Hydration</span>
+        </div>
+      </div>
+
+      </div>
+    </div>
+
+    <!-- STEP 2: SHOTS -->
+    <div class="section-card">
+      <div class="section-label">
+        <div class="section-icon">🥤</div>
+        <div class="section-title">Add Wellness Shots <span class="section-optional">(optional)</span></div>
+      </div>
+      <div class="shots-section">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:14px;">Single shot $5 · 3-pack $12 · 6-pack $22</div>
+      <div class="shot-type-grid">
+        <div class="shot-type-btn" onclick="selectShotType(this, 'ginger')">
+          <span class="shot-icon">🔥</span>
+          <div class="shot-name">Ginger</div>
+          <div class="shot-flavor">Immunity</div>
+        </div>
+        <div class="shot-type-btn" onclick="selectShotType(this, 'turmeric')">
+          <span class="shot-icon">🧡</span>
+          <div class="shot-name">Turmeric</div>
+          <div class="shot-flavor">Anti-inflam.</div>
+        </div>
+        <div class="shot-type-btn" onclick="selectShotType(this, 'pineapple')">
+          <span class="shot-icon">🍍</span>
+          <div class="shot-name">Pineapple</div>
+          <div class="shot-flavor">Energy</div>
+        </div>
+      </div>
+
+      <div class="shot-qty-section" id="shotQty">
+        <div class="shot-qty-label">How many?</div>
+        <div class="shot-qty-options">
+          <div class="qty-btn" onclick="selectShotQty(this, 1, 5)">
+            <span>1 Shot</span>
+            <span class="qty-price">+$5</span>
+          </div>
+          <div class="qty-btn" onclick="selectShotQty(this, 3, 12)">
+            <span>3-Pack</span>
+            <span class="qty-price">+$12</span>
+          </div>
+          <div class="qty-btn" onclick="selectShotQty(this, 6, 22)">
+            <span>6-Pack</span>
+            <span class="qty-price">+$22</span>
+          </div>
+        </div>
+        <button class="skip-shots" onclick="skipShots()">No shots, thanks</button>
+      </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: INFO -->
+    <div class="section-card">
+      <div class="section-label">
+        <div class="section-icon">👤</div>
+        <div class="section-title">Your Info</div>
+      </div>
+      <div class="fields">
+      <div>
+        <label class="field-label">Full Name <span class="req-star">*</span></label>
+        <input type="text" id="name" placeholder="First and last name" oninput="updateSummary()">
+      </div>
+      <div>
+        <label class="field-label">Phone / Instagram Handle <span class="req-star">*</span></label>
+        <input type="text" id="contact" placeholder="@handle or phone number" oninput="updateSummary()">
+      </div>
+      <div>
+        <label class="field-label">Delivery Area <span class="req-star">*</span></label>
+        <select id="area" onchange="updateSummary()">
+          <option value="">— Select your area —</option>
+          <option>Eastover</option>
+          <option>Stedman</option>
+          <option>Dunn</option>
+          <option>Lillington</option>
+          <option>Angier</option>
+          <option>Holly Springs</option>
+          <option>Fuquay-Varina</option>
+        </select>
+      </div>
+      <div>
+        <label class="field-label">Special Requests / Customizations</label>
+        <textarea id="notes" placeholder="Swap a flavor, allergies, anything else…"></textarea>
+      </div>
+      </div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="section-card" style="padding:0; background:transparent; border:none; box-shadow:none;">
+      <div class="summary-box" id="summaryBox">
+        <div class="summary-empty" id="summaryEmpty">Select a pack above to see your total.</div>
+        <div id="summaryLines" style="display:none">
+          <div class="summary-row"><span id="sPackLabel">—</span><span id="sPackPrice">—</span></div>
+          <div class="summary-row" id="sShotRow" style="display:none"><span id="sShotLabel">—</span><span id="sShotPrice">—</span></div>
+          <div class="summary-total"><span>Total</span><span id="sTotal">—</span></div>
+        </div>
+      </div>
+
+      <button class="submit-btn" onclick="submitOrder()">Place My Order 🌿</button>
+      <p class="submit-note">You'll receive a confirmation via DM. Payment details sent after order is confirmed.<br>Orders close <strong>Thursday at 8 PM</strong> · Delivered over the weekend.</p>
+    </div>
+
+  </div><!-- /form-content -->
+
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">🥤</div>
+    <h2>Order received!</h2>
+    <p>Thanks for ordering with Gathered & Pressed.<br>You'll get a DM confirmation soon with payment details.<br><br>Get ready for your weekend wellness!</p>
+  </div>
+
+</main>
+
+<script>
+  let selectedPack = null;
+  let selectedShotType = null;
+  let selectedShotQty = 0;
+  let selectedShotPrice = 0;
+
+  function selectPack(card) {
+    document.querySelectorAll('.pack-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedPack = { count: card.dataset.pack, price: parseInt(card.dataset.price), label: card.querySelector('.pack-name').textContent + ' — ' + card.querySelector('.pack-sub').textContent };
+    updateSummary();
+  }
+
+  function selectShotType(btn, type) {
+    document.querySelectorAll('.shot-type-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedShotType = type;
+    document.getElementById('shotQty').classList.add('visible');
+    // reset qty selection
+    document.querySelectorAll('.qty-btn').forEach(b => b.classList.remove('active'));
+    selectedShotQty = 0; selectedShotPrice = 0;
+    updateSummary();
+  }
+
+  function selectShotQty(btn, qty, price) {
+    document.querySelectorAll('.qty-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedShotQty = qty; selectedShotPrice = price;
+    updateSummary();
+  }
+
+  function skipShots() {
+    document.querySelectorAll('.shot-type-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.qty-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('shotQty').classList.remove('visible');
+    selectedShotType = null; selectedShotQty = 0; selectedShotPrice = 0;
+    updateSummary();
+  }
+
+  function updateSummary() {
+    if (!selectedPack) return;
+    document.getElementById('summaryEmpty').style.display = 'none';
+    document.getElementById('summaryLines').style.display = 'block';
+    document.getElementById('sPackLabel').textContent = selectedPack.label;
+    document.getElementById('sPackPrice').textContent = '$' + selectedPack.price;
+
+    const shotRow = document.getElementById('sShotRow');
+    if (selectedShotType && selectedShotQty > 0) {
+      const names = { ginger: 'Ginger', turmeric: 'Turmeric', pineapple: 'Pineapple Ginger' };
+      shotRow.style.display = 'flex';
+      document.getElementById('sShotLabel').textContent = names[selectedShotType] + ' Shot ×' + selectedShotQty;
+      document.getElementById('sShotPrice').textContent = '+$' + selectedShotPrice;
+    } else {
+      shotRow.style.display = 'none';
+    }
+
+    const total = selectedPack.price + selectedShotPrice;
+    document.getElementById('sTotal').textContent = '$' + total;
+  }
+
+  function submitOrder() {
+    const name = document.getElementById('name').value.trim();
+    const contact = document.getElementById('contact').value.trim();
+    const area = document.getElementById('area').value;
+
+    if (!selectedPack) { alert('Please choose a juice pack.'); return; }
+    if (!name) { alert('Please enter your name.'); return; }
+    if (!contact) { alert('Please enter your phone or Instagram handle.'); return; }
+    if (!area) { alert('Please select your delivery area.'); return; }
+
+    document.getElementById('formContent').classList.add('hidden');
+    document.getElementById('successScreen').classList.add('visible');
+    window.scrollTo(0, 0);
+  }
+</script>
+
+</body>
+</html>
